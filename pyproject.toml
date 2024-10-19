@@ -1,18 +1,26 @@
 [tool.poetry]
-name = "tooluse"
-version = "0.1.0"
+name = "tool-use-ai"
+version = "0.1.1"
 description = "Tools to simplify life with AI"
-authors = ["Ty Fiero <tyfierodev@gmail.com>","Mike Bird <mike@arrendy.com>"]
+authors = ["Ty Fiero <tyfierodev@gmail.com>", "Mike Bird <mike@arrendy.com>"]
 readme = "README.md"
 packages = [{include = "tool_use", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+feedparser = "^6.0.11"
+rich = "^13.9.2"
+prompt-toolkit = "^3.0.48"
+inquirer = "^3.4.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.urls]
-"Homepage" = "https://github.com/tyfiero/tool-use"
-"Bug Tracker" = "https://github.com/tyfiero/tool-use/issues"
+"Homepage" = "https://github.com/ToolUse/tool-use-ai"
+"Bug Tracker" = "https://github.com/ToolUse/tool-use-ai/issues"
+
+[tool.poetry.scripts]
+ai = "tool_use.cli:main"
+tooluse = "tool_use.rss_cli:main"
