@@ -2,7 +2,7 @@
 name = "tool-use-ai"
 version = "0.1.1"
 description = "Tools to simplify life with AI"
-authors = ["Ty Fiero <tyfierodev@gmail.com>", "Mike Bird <mike@arrendy.com>"]
+authors = ["Ty Fiero <tyfierodev@gmail.com>", "Mike Bird <tooluseai@gmail.com>"]
 readme = "README.md"
 packages = [{include = "tool_use", from = "src"}]
 
@@ -12,6 +12,9 @@ feedparser = "^6.0.11"
 rich = "^13.9.2"
 prompt-toolkit = "^3.0.48"
 inquirer = "^3.4.0"
+anthropic = "^0.21.0"
+ollama = "^0.1.6"
+groq = {git = "https://github.com/groq/groq-python.git"}
 
 [build-system]
 requires = ["poetry-core"]
