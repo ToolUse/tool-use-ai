@@ -16,15 +16,15 @@ The repository includes the following tools to simplify your interactions with A
 
 **Note:** Use `ai` for general tools and `tooluse` specifically for the RSS CLI tool.
 
-### 1. AI CLI Tool (`ai_cli`)
+### 1. AI CLI Tool (`ai do`)
 
 Generates and executes terminal commands based on natural language input using AI assistance.
 
 ```bash
-ai "Your command description here"
+ai do Your command description here
 ```
 
-### 2. RSS CLI (`rss_cli`)
+### 2. RSS CLI (`tooluse`)
 
 Fetches and displays podcast episodes from a specified RSS feed, allowing you to interact with them.
 
@@ -43,6 +43,8 @@ ai cal
 ### 4. Obsidian Plugin Generator (`make-obsidian-plugin`)
 
 Generates a customizable Obsidian plugin based on user input and AI-driven code generation.
+
+**Note:** Quotation marks are not required. You can input natural language directly after the command.
 
 ```bash
 ai make-obsidian-plugin "Plugin Name"
@@ -63,3 +65,5 @@ Processes text files using AI to extract key insights and display them in a user
 ```bash
 ai script1 input_file.txt --output output_file.txt
 ```
+
+**Note:** After `ai do`, you can input natural language without quotation marks.
