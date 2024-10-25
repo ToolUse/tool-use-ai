@@ -51,7 +51,7 @@ def main():
         elif args.script_name == "scriptomatic":
             from .scripts import scriptomatic
             scriptomatic.main(args.args)
-            
+        
         elif args.script_name == "do":
             ai_cli.main(args.args)
     except Exception as e:
