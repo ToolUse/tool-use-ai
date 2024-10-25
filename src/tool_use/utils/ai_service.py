@@ -6,11 +6,18 @@ from ..config_manager import config_manager
 
 
 class AIService:
+    DEFAULT_MODELS = {
+        "ollama": "llama3.1",
+        "groq": "llama-3.1-70b-versatile",
+        "anthropic": "claude-3-5-sonnet-20241022",
+    }
+
     def __init__(self, service_type: Optional[str] = None, model: Optional[str] = None):
-        self.service_type = (
-            service_type.lower() if service_type else config_manager.get_ai_service()
-        )
-        self.model = model if model else config_manager.get_ai_model()
+        self.service_type = service_type.lower() if service_type else "ollama"
+
+        # If no model specified, use the default for the service
+        self.model = model if model else self.DEFAULT_MODELS[self.service_type]
+
         if self.service_type == "groq":
             self.client = Groq(api_key=config_manager.get_api_key("groq"))
         elif self.service_type == "anthropic":
@@ -40,12 +47,14 @@ class AIService:
         raise Exception(f"Failed to query {self.service_type} after 3 attempts")
 
     def _query_ollama(self, prompt: str) -> str:
-        response = self.client.generate(model=self.model or "llama3.1", prompt=prompt)
+        response = self.client.chat(
+            model=self.model, messages=[{"role": "user", "content": prompt}]
+        )
         return response["message"]["content"]
 
     def _query_groq(self, prompt: str, max_tokens: int) -> str:
         completion = self.client.chat.completions.create(
-            model=self.model or "llama-3.1-70b-versatile",
+            model=self.model,
             messages=[{"role": "user", "content": prompt}],
             max_tokens=max_tokens,
         )
@@ -53,7 +62,7 @@ class AIService:
 
     def _query_anthropic(self, prompt: str, max_tokens: int) -> str:
         completion = self.client.messages.create(
-            model=self.model or "claude-3-5-sonnet-20241022",
+            model=self.model,
             max_tokens=max_tokens,
             messages=[{"role": "user", "content": prompt}],
         )
