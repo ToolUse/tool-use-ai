@@ -12,7 +12,7 @@ DEFAULT_CONFIG = {
 
 class ConfigManager:
     def __init__(self):
-        self.config_dir = Path.home() / ".tool-use-ai"
+        self.config_dir = Path.home() / ".tool-use"
         self.config_file = self.config_dir / "config.json"
         self.config = self._load_config()
 
