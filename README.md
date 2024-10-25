@@ -14,12 +14,14 @@ pip install tool-use-ai
 
 The repository includes the following tools to simplify your interactions with AI:
 
+**Note:** Use `ai` for general tools and `tooluse` specifically for the RSS CLI tool.
+
 ### 1. AI CLI Tool (`ai_cli`)
 
 Generates and executes terminal commands based on natural language input using AI assistance.
 
 ```bash
-ai ai_cli "Your command description here"
+ai "Your command description here"
 ```
 
 ### 2. RSS CLI (`rss_cli`)
@@ -27,7 +29,7 @@ ai ai_cli "Your command description here"
 Fetches and displays podcast episodes from a specified RSS feed, allowing you to interact with them.
 
 ```bash
-tooluse rss_cli
+tooluse "https://example.com/rss-feed.xml"
 ```
 
 ### 3. Calendar Manager (`cal`)
