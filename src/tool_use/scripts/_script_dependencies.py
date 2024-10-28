@@ -6,16 +6,11 @@ SCRIPT_DEPENDENCIES = {
         "google-api-python-client",
         "pytz",
         "tzlocal",
-        "rich"
-    ],
-    "make-obsidian-plugin": [
         "rich",
-        "inquirer"
     ],
-    "scriptomatic": [
-        "scriptomatic"
-    ],
-    "script1": [
+    "make-obsidian-plugin": ["rich", "inquirer"],
+    "scriptomatic": ["scriptomatic"],
+    "do": [
         # Add dependencies for script1
-    ]
+    ],
 }
