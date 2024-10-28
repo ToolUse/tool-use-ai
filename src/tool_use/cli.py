@@ -48,6 +48,9 @@ def main():
         elif args.script_name == "script1":
             from .scripts import script1
             script1.main(args.args)
+        elif args.script_name == "convert":
+            from .scripts import convert
+            convert.main()
         elif args.script_name == "scriptomatic":
             from .scripts import scriptomatic
             scriptomatic.main(args.args)

@@ -15,7 +15,7 @@ SCRIPT_DEPENDENCIES = {
     "scriptomatic": [
         "scriptomatic"
     ],
-    "script1": [
-        # Add dependencies for script1
+    "convert": [
+       "open-interpreter", "anthropic>=0.37.1,<0.38.0"
     ]
 }
