@@ -3,7 +3,7 @@ import argparse
 import subprocess
 import pkg_resources
 from .scripts._script_dependencies import SCRIPT_DEPENDENCIES
-from .scripts import ai_cli
+from .scripts import ai_cli, cal, obsidian_plugin, script1, scriptomatic
 from .utils.config_wizard import setup_wizard, SCRIPT_INFO
 
 
@@ -32,40 +32,20 @@ def main():
         help="Configure specific script",
     )
 
-    # Script command for backwards compatibility
-    script_parser = subparsers.add_parser("script", help="Run a specific script")
-    script_parser.add_argument(
-        "script_name",
-        choices=list(SCRIPT_DEPENDENCIES.keys()),
-        help="Name of the script to run",
-    )
-    script_parser.add_argument(
-        "args", nargs=argparse.REMAINDER, help="Arguments for the script"
-    )
+    # Add all script commands
+    all_scripts = {
+        "do": "AI command generation",
+        "make-obsidian-plugin": "Generate Obsidian plugin",
+        "script1": "Run script1",
+        "scriptomatic": "Run scriptomatic",
+        "cal": "Calendar tool",
+    }
 
-    # Individual command parsers
-    do_parser = subparsers.add_parser("do", help="AI command generation")
-    do_parser.add_argument("args", nargs=argparse.REMAINDER, help="Arguments for do")
-
-    obsidian_parser = subparsers.add_parser(
-        "make-obsidian-plugin", help="Generate Obsidian plugin"
-    )
-    obsidian_parser.add_argument(
-        "args", nargs=argparse.REMAINDER, help="Arguments for make-obsidian-plugin"
-    )
-
-    script1_parser = subparsers.add_parser("script1", help="Run script1")
-    script1_parser.add_argument(
-        "args", nargs=argparse.REMAINDER, help="Arguments for script1"
-    )
-
-    scriptomatic_parser = subparsers.add_parser("scriptomatic", help="Run scriptomatic")
-    scriptomatic_parser.add_argument(
-        "args", nargs=argparse.REMAINDER, help="Arguments for scriptomatic"
-    )
-
-    cal_parser = subparsers.add_parser("cal", help="Calendar tool")
-    cal_parser.add_argument("args", nargs=argparse.REMAINDER, help="Arguments for cal")
+    for name, help_text in all_scripts.items():
+        script_parser = subparsers.add_parser(name, help=help_text)
+        script_parser.add_argument(
+            "args", nargs=argparse.REMAINDER, help=f"Arguments for {name}"
+        )
 
     args = parser.parse_args()
 
@@ -74,12 +54,8 @@ def main():
             setup_wizard(args.script if hasattr(args, "script") else None)
             return
 
-        if args.command == "script":
-            script_name = args.script_name
-            script_args = args.args
-        else:
-            script_name = args.command
-            script_args = args.args if hasattr(args, "args") else []
+        script_name = args.command
+        script_args = args.args if hasattr(args, "args") else []
 
         if script_name not in SCRIPT_DEPENDENCIES:
             parser.print_help()
@@ -88,25 +64,21 @@ def main():
         # Try to import dependencies, install if missing
         ensure_dependencies(script_name)
 
-        # Import and run the script
-        if script_name == "do":
-            ai_cli.main(script_args)
-        elif script_name == "make-obsidian-plugin":
-            from .scripts import obsidian_plugin
+        # Map script names to their modules
+        script_modules = {
+            "do": ai_cli,
+            "make-obsidian-plugin": obsidian_plugin,
+            "script1": script1,
+            "scriptomatic": scriptomatic,
+            "cal": cal,
+        }
 
-            obsidian_plugin.main(script_args)
-        elif script_name == "script1":
-            from .scripts import script1
-
-            script1.main(script_args)
-        elif script_name == "scriptomatic":
-            from .scripts import scriptomatic
-
-            scriptomatic.main(script_args)
-        elif script_name == "cal":
-            from .scripts import cal
-
-            cal.main(script_args)
+        # Run the appropriate script
+        if script_name in script_modules:
+            script_modules[script_name].main(script_args)
+        else:
+            print(f"Unknown script: {script_name}")
+            sys.exit(1)
 
     except Exception as e:
         print(f"Error running {args.command}: {str(e)}")
