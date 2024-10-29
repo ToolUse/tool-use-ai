@@ -10,6 +10,10 @@ import webbrowser
 import subprocess
 import os
 import inquirer
+import sounddevice as sd
+import soundfile as sf
+import io
+import requests
 
 console = Console()
 
@@ -72,11 +76,28 @@ def handle_option(episode, option):
 
 def play_mp3(url):
     try:
-        subprocess.run(["mpv", url], check=True)
-    except subprocess.CalledProcessError:
-        console.print("[bold red]Error:[/bold red] Failed to play MP3. Make sure you have mpv installed.")
-    except FileNotFoundError:
-        console.print("[bold red]Error:[/bold red] mpv not found. Please install mpv to play MP3s in the CLI.")
+        # Stream the audio file
+        console.print("[yellow]Downloading audio...\n[/yellow]")
+        response = requests.get(url)
+        
+        try:
+            # Try to play the audio
+            data, samplerate = sf.read(io.BytesIO(response.content))
+            console.print("[yellow]Playing!\n[/yellow]")
+            sd.play(data, samplerate)
+            sd.wait()  # Wait until file is done playing
+        except Exception as e:
+            console.print(f"[yellow]Could not play audio directly, falling back to mpv...[/yellow]")
+            raise Exception("Format not supported")
+            
+    except (ImportError, Exception):
+        console.print("[bold yellow]Falling back to mpv...[/bold yellow]")
+        try:
+            subprocess.run(["mpv", url], check=True)
+        except (subprocess.CalledProcessError, FileNotFoundError):
+            console.print("[bold red]Error:[/bold red] Could not play audio. Please install either:")
+            console.print("- sounddevice and soundfile (pip install sounddevice soundfile)")
+            console.print("- mpv (system package)")
 
 def main():
     rss_url = "https://anchor.fm/s/fb2a98a0/podcast/rss"
