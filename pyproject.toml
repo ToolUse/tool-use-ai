@@ -28,4 +28,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 ai = "tool_use.cli:main"
-tooluse = "tool_use.rss_cli:main"
+tooluse = "tool_use.tooluse.cli:main"

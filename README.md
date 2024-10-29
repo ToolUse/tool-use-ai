@@ -1,6 +1,6 @@
 # tool-use
 
-Tools to simplify life with AI
+Tools to simplify life with AI. Brought to you by the hosts of [ToolUse](https://www.youtube.com/@ToolUseAI).
 
 ## Installation
 
@@ -29,10 +29,18 @@ ai do Your command description here
 Fetches and displays podcast episodes from a specified RSS feed, allowing you to interact with them.
 
 ```bash
-tooluse "https://example.com/rss-feed.xml"
+tooluse
 ```
 
-### 3. Calendar Manager (`cal`)
+### 3. Contact Form (`tooluse contact`)
+
+Provides a contact form to submit feedback, requests or just to say hi.
+
+```bash
+tooluse contact
+```
+
+### 4. Calendar Manager (`cal`)
 
 Manages Google Calendar events, including creating, editing, searching, and deleting events.
 
@@ -40,7 +48,7 @@ Manages Google Calendar events, including creating, editing, searching, and dele
 ai cal
 ```
 
-### 4. Obsidian Plugin Generator (`make-obsidian-plugin`)
+### 5. Obsidian Plugin Generator (`make-obsidian-plugin`)
 
 Generates a customizable Obsidian plugin based on user input and AI-driven code generation.
 
@@ -50,7 +58,7 @@ Generates a customizable Obsidian plugin based on user input and AI-driven code 
 ai make-obsidian-plugin "Plugin Name"
 ```
 
-### 5. Scriptomatic (`scriptomatic`)
+### 6. Scriptomatic (`scriptomatic`)
 
 Creates scripts by specifying the desired functionality, leveraging AI to generate the code.
 
@@ -58,12 +66,12 @@ Creates scripts by specifying the desired functionality, leveraging AI to genera
 ai scriptomatic "Your script description here"
 ```
 
-### 6. Script1 (`script1`)
+### 7. Process with AI (`process_with_ai`)
 
 Processes text files using AI to extract key insights and display them in a user-friendly format.
 
 ```bash
-ai script1 input_file.txt --output output_file.txt
+ai process_with_ai input_file.txt --output output_file.txt
 ```
 
 **Note:** After `ai do`, you can input natural language without quotation marks.
