@@ -48,7 +48,15 @@ Manages Google Calendar events, including creating, editing, searching, and dele
 ai cal
 ```
 
-### 5. Obsidian Plugin Generator (`make-obsidian-plugin`)
+### 5. Convert anything (`convert`)
+
+Converts anything to anything using Open Interpreter.
+
+```bash
+ai convert "/path/to/file.txt to pdf"
+```
+
+### 6. Obsidian Plugin Generator (`make-obsidian-plugin`)
 
 Generates a customizable Obsidian plugin based on user input and AI-driven code generation.
 
@@ -56,14 +64,6 @@ Generates a customizable Obsidian plugin based on user input and AI-driven code 
 
 ```bash
 ai make-obsidian-plugin "Plugin Name"
-```
-
-### 6. Scriptomatic (`scriptomatic`)
-
-Creates scripts by specifying the desired functionality, leveraging AI to generate the code.
-
-```bash
-ai scriptomatic "Your script description here"
 ```
 
 **Note:** After `ai do`, you can input natural language without quotation marks.
