@@ -11,6 +11,6 @@ SCRIPT_DEPENDENCIES = {
     "make-obsidian-plugin": ["rich", "inquirer"],
     "scriptomatic": ["scriptomatic"],
     "do": [
-        # Add dependencies for script1
+        # Add dependencies for ai_cli
     ],
 }

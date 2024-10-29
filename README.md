@@ -58,12 +58,4 @@ Creates scripts by specifying the desired functionality, leveraging AI to genera
 ai scriptomatic "Your script description here"
 ```
 
-### 6. Script1 (`script1`)
-
-Processes text files using AI to extract key insights and display them in a user-friendly format.
-
-```bash
-ai script1 input_file.txt --output output_file.txt
-```
-
 **Note:** After `ai do`, you can input natural language without quotation marks.
