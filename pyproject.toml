@@ -17,6 +17,8 @@ ollama = "^0.1.6"
 groq = {git = "https://github.com/groq/groq-python.git"}
 tomli = "^2.0.2"
 tomli-w = "^1.1.0"
+sounddevice = "^0.5.1"
+soundfile = "^0.12.1"
 
 [build-system]
 requires = ["poetry-core"]
