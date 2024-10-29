@@ -3,7 +3,7 @@ import argparse
 import subprocess
 import pkg_resources
 from .scripts._script_dependencies import SCRIPT_DEPENDENCIES
-from .scripts import ai_cli, cal, obsidian_plugin, script1, scriptomatic
+from .scripts import ai_cli, cal, obsidian_plugin, process_with_ai, scriptomatic
 from .utils.config_wizard import setup_wizard, SCRIPT_INFO
 
 
@@ -36,7 +36,7 @@ def main():
     all_scripts = {
         "do": "AI command generation",
         "make-obsidian-plugin": "Generate Obsidian plugin",
-        "script1": "Run script1",
+        "process_with_ai": "Run process_with_ai",
         "scriptomatic": "Run scriptomatic",
         "cal": "Calendar tool",
     }
@@ -68,7 +68,7 @@ def main():
         script_modules = {
             "do": ai_cli,
             "make-obsidian-plugin": obsidian_plugin,
-            "script1": script1,
+            "process_with_ai": process_with_ai,
             "scriptomatic": scriptomatic,
             "cal": cal,
         }
