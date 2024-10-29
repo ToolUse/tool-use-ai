@@ -4,9 +4,13 @@ import os
 import platform
 import subprocess
 import sys
+import time
 from typing import Dict, Optional
+from pynput.keyboard import Controller
 from ..utils.ai_service import AIService
 from ..config_manager import config_manager
+
+keyboard = Controller()
 
 
 def get_environment_info() -> Dict[str, str]:
@@ -40,31 +44,14 @@ def query_ai_service(
         sys.exit(1)
 
 
-def get_command_explanation(
-    command: str, service_type: str, model: Optional[str]
-) -> str:
-    ai_service = AIService(service_type, model)
-    explanation_prompt = f"""Explain this command in clear, concise terms:
-{command}
-
-Explain:
-1. What each part does
-2. Any important flags/options used
-3. Any potential gotchas or limitations
-
-Keep the explanation brief but informative."""
-
-    try:
-        return ai_service.query(explanation_prompt).strip()
-    except Exception as e:
-        print(f"Error getting explanation: {e}", file=sys.stderr)
-        return "Unable to get explanation"
-
-
 def write_to_terminal(command: str) -> None:
-    # Note: This is a simplistic version - might need adjustment based on terminal type
-    sys.stdout.write(command)
+    # Clear the current line
+    sys.stdout.write("\r" + " " * (len(command) + 1) + "\r")
     sys.stdout.flush()
+
+    # Small delay to ensure terminal is ready
+    time.sleep(0.1)
+    keyboard.type(command)
 
 
 def execute_command(command: str) -> None:
@@ -113,7 +100,7 @@ def main(args=None):
     env_info = get_environment_info()
     command = query_ai_service(input_text, service, model, env_info)
 
-    # Show the command
+    # Show the command preview
     print(f"\n\033[92m{command}\033[0m")
 
     while True:

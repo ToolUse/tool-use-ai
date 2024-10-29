@@ -9,8 +9,6 @@ SCRIPT_DEPENDENCIES = {
         "rich",
     ],
     "make-obsidian-plugin": ["rich", "inquirer"],
-    "do": [
-        # Add dependencies for ai_cli
-    ],
+    "do": ["pynput"],
     "convert": ["open-interpreter", "anthropic>=0.37.1,<0.38.0"],
 }
