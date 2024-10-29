@@ -3,7 +3,7 @@ import argparse
 import subprocess
 import pkg_resources
 from .scripts._script_dependencies import SCRIPT_DEPENDENCIES
-from .scripts import ai_cli, cal, obsidian_plugin, scriptomatic
+from .scripts import ai_cli, cal, obsidian_plugin, convert
 from .utils.config_wizard import setup_wizard, SCRIPT_INFO
 
 
@@ -14,9 +14,9 @@ def ensure_dependencies(script_name):
     for package in SCRIPT_DEPENDENCIES[script_name]:
         try:
             pkg_resources.require(package)
-        except pkg_resources.DistributionNotFound:
+        except (pkg_resources.DistributionNotFound, pkg_resources.VersionConflict):
             print(f"Installing required dependency: {package}")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+            subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", package])
 
 
 def main():
@@ -36,8 +36,8 @@ def main():
     all_scripts = {
         "do": "AI command generation",
         "make-obsidian-plugin": "Generate Obsidian plugin",
-        "scriptomatic": "Run scriptomatic",
         "cal": "Calendar tool",
+        "convert": "Convert anything to anything",
     }
 
     for name, help_text in all_scripts.items():
@@ -67,8 +67,8 @@ def main():
         script_modules = {
             "do": ai_cli,
             "make-obsidian-plugin": obsidian_plugin,
-            "scriptomatic": scriptomatic,
             "cal": cal,
+            "convert": convert,
         }
 
         # Run the appropriate script
