@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tool-use-ai"
-version = "0.1.1"
+version = "1.0.0"
 description = "Tools to simplify life with AI"
 authors = ["Ty Fiero <tyfierodev@gmail.com>", "Mike Bird <tooluseai@gmail.com>"]
 readme = "README.md"
@@ -14,11 +14,12 @@ prompt-toolkit = "^3.0.48"
 inquirer = "^3.4.0"
 anthropic = "^0.21.0"
 ollama = "^0.1.6"
-groq = {git = "https://github.com/groq/groq-python.git"}
+groq = "0.11.0"
 tomli = "^2.0.2"
 tomli-w = "^1.1.0"
 sounddevice = "^0.5.1"
 soundfile = "^0.12.1"
+google-auth-oauthlib = "^1.0.0"
 
 [build-system]
 requires = ["poetry-core"]

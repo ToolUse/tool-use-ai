@@ -398,8 +398,10 @@ version = "0.11.0"
 description = "The official Python library for the groq API"
 optional = false
 python-versions = ">=3.7"
-files = []
-develop = false
+files = [
+    {file = "groq-0.11.0-py3-none-any.whl", hash = "sha256:e328531c979542e563668c62260aec13b43a6ee0ca9e2fb22dff1d26f8c8ce54"},
+    {file = "groq-0.11.0.tar.gz", hash = "sha256:dbb9aefedf388ddd4801ec7bf3eba7f5edb67948fec0cd2829d97244059f42a7"},
+]
 
 [package.dependencies]
 anyio = ">=3.5.0,<5"
@@ -408,12 +410,6 @@ httpx = ">=0.23.0,<1"
 pydantic = ">=1.9.0,<3"
 sniffio = "*"
 typing-extensions = ">=4.7,<5"
-
-[package.source]
-type = "git"
-url = "https://github.com/groq/groq-python.git"
-reference = "HEAD"
-resolved_reference = "8cbcbae7d8b2947587f16d0bad9bd8ef8c54c166"
 
 [[package]]
 name = "h11"
@@ -474,13 +470,13 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "huggingface-hub"
-version = "0.26.1"
+version = "0.26.2"
 description = "Client library to download and publish models, datasets and other repos on the huggingface.co hub"
 optional = false
 python-versions = ">=3.8.0"
 files = [
-    {file = "huggingface_hub-0.26.1-py3-none-any.whl", hash = "sha256:5927a8fc64ae68859cd954b7cc29d1c8390a5e15caba6d3d349c973be8fdacf3"},
-    {file = "huggingface_hub-0.26.1.tar.gz", hash = "sha256:414c0d9b769eecc86c70f9d939d0f48bb28e8461dd1130021542eff0212db890"},
+    {file = "huggingface_hub-0.26.2-py3-none-any.whl", hash = "sha256:98c2a5a8e786c7b2cb6fdeb2740893cba4d53e312572ed3d8afafda65b128c46"},
+    {file = "huggingface_hub-0.26.2.tar.gz", hash = "sha256:b100d853465d965733964d123939ba287da60a547087783ddff8a323f340332b"},
 ]
 
 [package.dependencies]
@@ -774,17 +770,6 @@ files = [
 windows-terminal = ["colorama (>=0.4.6)"]
 
 [[package]]
-name = "python-vlc"
-version = "3.0.21203"
-description = "VLC bindings for python."
-optional = false
-python-versions = "*"
-files = [
-    {file = "python_vlc-3.0.21203-py3-none-any.whl", hash = "sha256:1613451a31b692ec276296ceeae0c0ba82bfc2d094dabf9aceb70f58944a6320"},
-    {file = "python_vlc-3.0.21203.tar.gz", hash = "sha256:52d0544b276b11e58b6c0b748c3e0518f94f74b1b4cd328c83a59eacabead1ec"},
-]
-
-[[package]]
 name = "pyyaml"
 version = "6.0.2"
 description = "YAML parser and emitter for Python"
@@ -918,22 +903,6 @@ optional = false
 python-versions = "*"
 files = [
     {file = "sgmllib3k-1.0.0.tar.gz", hash = "sha256:7868fb1c8bfa764c1ac563d3cf369c381d1325d36124933a726f29fcdaa812e9"},
-]
-
-[[package]]
-name = "simpleaudio"
-version = "1.0.4"
-description = "Simple, asynchronous audio playback for Python 3."
-optional = false
-python-versions = "*"
-files = [
-    {file = "simpleaudio-1.0.4-cp37-cp37m-macosx_10_6_intel.whl", hash = "sha256:05b63da515f5fc7c6f40e4d9673d22239c5e03e2bda200fc09fd21c185d73713"},
-    {file = "simpleaudio-1.0.4-cp37-cp37m-win32.whl", hash = "sha256:f1a4fe3358429b2ea3181fd782e4c4fff5c123ca86ec7fc29e01ee9acd8a227a"},
-    {file = "simpleaudio-1.0.4-cp37-cp37m-win_amd64.whl", hash = "sha256:86f1b0985629852afe67259ac6c24905ca731cb202a6e96b818865c56ced0c27"},
-    {file = "simpleaudio-1.0.4-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:f68820297ad51577e3a77369e7e9b23989d30d5ae923bf34c92cf983c04ade04"},
-    {file = "simpleaudio-1.0.4-cp38-cp38-win32.whl", hash = "sha256:67348e3d3ccbae73bd126beed7f1e242976889620dbc6974c36800cd286430fc"},
-    {file = "simpleaudio-1.0.4-cp38-cp38-win_amd64.whl", hash = "sha256:f346a4eac9cdbb1b3f3d0995095b7e86c12219964c022f4d920c22f6ca05fb4c"},
-    {file = "simpleaudio-1.0.4.tar.gz", hash = "sha256:691c88649243544db717e7edf6a9831df112104e1aefb5f6038a5d071e8cf41d"},
 ]
 
 [[package]]
@@ -1142,13 +1111,13 @@ files = [
 
 [[package]]
 name = "tqdm"
-version = "4.66.5"
+version = "4.66.6"
 description = "Fast, Extensible Progress Meter"
 optional = false
 python-versions = ">=3.7"
 files = [
-    {file = "tqdm-4.66.5-py3-none-any.whl", hash = "sha256:90279a3770753eafc9194a0364852159802111925aa30eb3f9d85b0e805ac7cd"},
-    {file = "tqdm-4.66.5.tar.gz", hash = "sha256:e1020aef2e5096702d8a025ac7d16b1577279c9d63f8375b63083e9a5f0fcbad"},
+    {file = "tqdm-4.66.6-py3-none-any.whl", hash = "sha256:223e8b5359c2efc4b30555531f09e9f2f3589bcd7fdd389271191031b49b7a63"},
+    {file = "tqdm-4.66.6.tar.gz", hash = "sha256:4bdd694238bef1485ce839d67967ab50af8f9272aab687c0d7702a01da0be090"},
 ]
 
 [package.dependencies]
@@ -1213,4 +1182,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "253aceaf01f4d4fcb3a84732c5b5efea08fbcf82a66fdbb2468f2c7a617df596"
+content-hash = "94b0532811221edc75418776caa3b7dcb1c31516dd03c3c8dc5143090c964100"
