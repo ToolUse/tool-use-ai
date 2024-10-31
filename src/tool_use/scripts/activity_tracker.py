@@ -36,9 +36,9 @@ Commands:
 
 Examples:
   ai log category list
-  ai log category rename "Coding" "Programming"
-  ai log category merge "Dev" "Programming"
-  ai log category show "Programming"
+  ai log category rename "<old name>" "<new name>"
+  ai log category merge "<source name>" "<target name>"
+  ai log category show "<category name>"
 """
 
 
@@ -57,6 +57,8 @@ class ActivityManager:
 
         # Initialize AI service
         self.ai_service = AIService()
+
+        self.console = Console()
 
     def init_database(self):
         """Initialize SQLite database with required tables"""
@@ -254,7 +256,7 @@ class ActivityManager:
         Respond with just the SQL query, nothing else."""
 
         sql_query = self.ai_service.query(prompt).strip()
-        print(f"Generated SQL: {sql_query}")  # TODO: remove after testing
+        # print(f"Generated SQL: {sql_query}")  # TODO: remove after testing
 
         # Validate and correct if needed
         conn = sqlite3.connect(self.db_path)
@@ -267,7 +269,7 @@ class ActivityManager:
             cursor.execute(sql_query)
             cursor.execute("ROLLBACK")
         except sqlite3.Error as e:
-            console.print(f"[red]Error executing query: {e}[/red]")
+            self.console.print(f"[red]Error executing query: {e}[/red]")
             results = []
 
         # Execute the (possibly corrected) query
@@ -287,7 +289,7 @@ Please provide a corrected SQL query that will work."""
 
             cursor.execute(sql_query)
             results = [dict(row) for row in cursor.fetchall()]
-            print(f"Query results: {results}")  # TODO: remove after testing
+            # print(f"Query results: {results}")  # TODO: remove after testing
         except sqlite3.Error as e:
             print(f"Error executing query: {e}")
             results = []
@@ -334,7 +336,7 @@ Please provide a corrected SQL query that will work."""
             cursor.execute("COMMIT")
             return True
         except sqlite3.Error as e:
-            console.print(f"[red]Error renaming category: {e}[/red]")
+            self.console.print(f"[red]Error renaming category: {e}[/red]")
             cursor.execute("ROLLBACK")
             return False
         finally:
@@ -364,7 +366,7 @@ Please provide a corrected SQL query that will work."""
             cursor.execute("COMMIT")
             return True
         except sqlite3.Error as e:
-            console.print(f"[red]Error merging categories: {e}[/red]")
+            self.console.print(f"[red]Error merging categories: {e}[/red]")
             cursor.execute("ROLLBACK")
             return False
         finally:
