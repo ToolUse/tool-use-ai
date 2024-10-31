@@ -11,4 +11,5 @@ SCRIPT_DEPENDENCIES = {
     "make-obsidian-plugin": ["rich", "inquirer"],
     "do": ["pynput"],
     "convert": ["open-interpreter", "anthropic>=0.37.1,<0.38.0"],
+    "log": [],
 }

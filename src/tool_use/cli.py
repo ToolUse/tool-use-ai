@@ -3,7 +3,7 @@ import argparse
 import subprocess
 import pkg_resources
 from .scripts._script_dependencies import SCRIPT_DEPENDENCIES
-from .scripts import ai_cli, cal, obsidian_plugin, convert
+from .scripts import ai_cli, cal, obsidian_plugin, convert, activity_tracker
 from .utils.config_wizard import setup_wizard, SCRIPT_INFO
 
 
@@ -16,7 +16,9 @@ def ensure_dependencies(script_name):
             pkg_resources.require(package)
         except (pkg_resources.DistributionNotFound, pkg_resources.VersionConflict):
             print(f"Installing required dependency: {package}")
-            subprocess.check_call([sys.executable, "-m", "pip", "install", "--upgrade", package])
+            subprocess.check_call(
+                [sys.executable, "-m", "pip", "install", "--upgrade", package]
+            )
 
 
 def main():
@@ -38,6 +40,7 @@ def main():
         "make-obsidian-plugin": "Generate Obsidian plugin",
         "cal": "Calendar tool",
         "convert": "Convert anything to anything",
+        "log": "Track your activities",
     }
 
     for name, help_text in all_scripts.items():
@@ -69,6 +72,7 @@ def main():
             "make-obsidian-plugin": obsidian_plugin,
             "cal": cal,
             "convert": convert,
+            "log": activity_tracker,
         }
 
         # Run the appropriate script
