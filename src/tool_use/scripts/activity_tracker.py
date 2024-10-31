@@ -3,6 +3,8 @@ import sqlite3
 import time
 import datetime
 from typing import Optional, Tuple, List
+from rich.console import Console
+from rich.table import Table
 from ..utils.ai_service import AIService
 
 HELP_TEXT = """Usage: ai log [command] [args]
@@ -197,12 +199,13 @@ class ActivityManager:
 
     def process_query(self, query: str) -> List[dict]:
         """Process natural language queries about activities with validation and correction"""
+        console = Console()
         example_templates = {
             "time_period": """
                 -- Shows totals for a time period
-                SELECT category, SUM(duration) as total_duration 
+                SELECT name, start_time, duration, category, SUM(duration) as total_duration 
                 FROM activities 
-                WHERE date(start_time) = date('now', '-1 day', 'localtime')  -- or other date conditions
+                WHERE date(start_time) = date('now', 'localtime')
                 GROUP BY category
             """,
             "comparison": """
@@ -222,27 +225,36 @@ class ActivityManager:
             """,
         }
 
-        # Get initial SQL query
-        prompt = f"""Given this natural language query: "{query}"
+        # Update the prompt to be more explicit about natural language interpretation
+        prompt = f"""Convert this natural language question into a SQL query: "{query}"
+        The user is asking about their activity history - interpret the meaning, don't use the exact words as search terms.
+        For example:
+        - "what did I do today" → show all activities from today
+        - "how long did I code yesterday" → show coding-related activities from yesterday
+        - "show me my activities this week" → show all activities from the past 7 days
+        - "what did I do the most today" → show today's activities ordered by duration DESC
 
-Here are some example query patterns (but feel free to modify or write your own):
-{example_templates}
+        Database schema:
+        CREATE TABLE activities (
+            id INTEGER PRIMARY KEY,
+            name TEXT NOT NULL,
+            start_time TIMESTAMP NOT NULL,
+            end_time TIMESTAMP,
+            duration INTEGER,
+            category TEXT
+        );
 
-Database schema:
-CREATE TABLE activities (
-    id INTEGER PRIMARY KEY,
-    name TEXT NOT NULL,
-    start_time TIMESTAMP NOT NULL,
-    end_time TIMESTAMP,
-    duration INTEGER,
-    category TEXT
-);
-
-Write a SQL query that best answers the user's question.
-Respond with just the SQL query, nothing else."""
+        Write a SQL query that best answers the user's question.
+        IMPORTANT: 
+        - Always include name, start_time, duration, and category in the SELECT clause
+        - Do not use parameter placeholders (?)
+        - Write the complete query with all conditions included
+        - For "today", use date(start_time) = date('now', 'localtime')
+        - For duration-based queries, order by duration DESC
+        Respond with just the SQL query, nothing else."""
 
         sql_query = self.ai_service.query(prompt).strip()
-        print(f"Generated SQL: {sql_query}")  # Debug print
+        print(f"Generated SQL: {sql_query}")  # TODO: remove after testing
 
         # Validate and correct if needed
         conn = sqlite3.connect(self.db_path)
@@ -255,24 +267,27 @@ Respond with just the SQL query, nothing else."""
             cursor.execute(sql_query)
             cursor.execute("ROLLBACK")
         except sqlite3.Error as e:
-            print(f"SQL Error: {e}")  # Debug print
-            correction_prompt = f"""The SQL query:
-{sql_query}
-Failed with error: {str(e)}
-
-Here are valid example patterns:
-{example_templates}
-
-Please provide a corrected SQL query that will work."""
-
-            sql_query = self.ai_service.query(correction_prompt).strip()
-            print(f"Corrected SQL: {sql_query}")  # Debug print
+            console.print(f"[red]Error executing query: {e}[/red]")
+            results = []
 
         # Execute the (possibly corrected) query
         try:
+            # First check if the query has parameter placeholders
+            if "?" in sql_query:
+                # Have the AI fix the query to not use parameters
+                correction_prompt = f"""The SQL query:
+{sql_query}
+Contains parameter placeholders (?). Please rewrite it without using parameters,
+using direct values or conditions instead.
+
+Please provide a corrected SQL query that will work."""
+
+                sql_query = self.ai_service.query(correction_prompt).strip()
+                print(f"Corrected SQL (removed parameters): {sql_query}")  # Debug print
+
             cursor.execute(sql_query)
             results = [dict(row) for row in cursor.fetchall()]
-            print(f"Query results: {results}")  # Debug print
+            print(f"Query results: {results}")  # TODO: remove after testing
         except sqlite3.Error as e:
             print(f"Error executing query: {e}")
             results = []
@@ -319,7 +334,7 @@ Please provide a corrected SQL query that will work."""
             cursor.execute("COMMIT")
             return True
         except sqlite3.Error as e:
-            print(f"Error renaming category: {e}")
+            console.print(f"[red]Error renaming category: {e}[/red]")
             cursor.execute("ROLLBACK")
             return False
         finally:
@@ -349,7 +364,7 @@ Please provide a corrected SQL query that will work."""
             cursor.execute("COMMIT")
             return True
         except sqlite3.Error as e:
-            print(f"Error merging categories: {e}")
+            console.print(f"[red]Error merging categories: {e}[/red]")
             cursor.execute("ROLLBACK")
             return False
         finally:
@@ -390,6 +405,7 @@ Please provide a corrected SQL query that will work."""
 def process_command(args: list[str]) -> None:
     """Process command line arguments"""
     manager = ActivityManager()
+    console = Console()
 
     # Handle help command
 
@@ -407,34 +423,68 @@ def process_command(args: list[str]) -> None:
         if cmd == "list":
             categories = manager.list_categories()
             if not categories:
-                print("No categories found")
+                console.print("[red]No categories found[/red]")
                 return
+            table = Table(title="Activity Categories")
+            table.add_column("Category", style="cyan")
+            table.add_column("Activities", justify="right")
+            table.add_column("Total Time", justify="right")
+            table.add_column("Uses", justify="right")
+
             for name, usage_count, activity_count, total_duration in categories:
                 duration_str = manager.format_duration(total_duration)
-                print(
-                    f"{name}: {activity_count} activities, {duration_str} total ({usage_count} uses)"
-                )
+                table.add_row(name, str(activity_count), duration_str, str(usage_count))
 
-        elif cmd == "rename" and len(args) == 4:
+            console.print(table)
+
+        elif cmd == "rename":
+            if len(args) != 4:
+                console.print(
+                    "[red]Error:[/red] rename requires old and new category names"
+                )
+                return
             old_name, new_name = args[2], args[3]
             if manager.rename_category(old_name, new_name):
-                print(f"Renamed category '{old_name}' to '{new_name}'")
+                console.print(
+                    f"[green]Renamed category '{old_name}' to '{new_name}'[/green]"
+                )
             else:
-                print("Failed to rename category")
+                console.print("[red]Failed to rename category[/red]")
+            return
 
-        elif cmd == "merge" and len(args) == 4:
+        elif cmd == "merge":
+            if len(args) != 4:
+                console.print(
+                    "[red]Error:[/red] merge requires source and target category names"
+                )
+                return
             from_cat, into_cat = args[2], args[3]
             if manager.merge_categories(from_cat, into_cat):
-                print(f"Merged category '{from_cat}' into '{into_cat}'")
+                console.print(
+                    f"[green]Merged category '{from_cat}' into '{into_cat}'[/green]"
+                )
             else:
-                print("Failed to merge categories")
+                console.print("[red]Failed to merge categories[/red]")
+            return
 
-        elif cmd == "show" and len(args) == 3:
+        elif cmd == "show":
+            if len(args) != 3:
+                console.print("[red]Error:[/red] Please specify a category name")
+                return
             category = args[2]
             activities = manager.show_category(category)
             if not activities:
-                print(f"No activities found in category '{category}'")
+                console.print(
+                    f"[red]No activities found in category '{category}'[/red]"
+                )
                 return
+
+            # Create and display table (indent fixed)
+            table = Table(title=f"Activities in {category}")
+            table.add_column("Date", style="cyan")
+            table.add_column("Activity")
+            table.add_column("Duration", justify="right")
+
             for activity in activities:
                 start_time = datetime.datetime.fromisoformat(
                     str(activity["start_time"])
@@ -442,28 +492,37 @@ def process_command(args: list[str]) -> None:
                 duration = (
                     manager.format_duration(activity["duration"])
                     if activity["duration"]
-                    else "In progress"
+                    else "[yellow]In progress[/yellow]"
                 )
-                print(
-                    f"{start_time.strftime('%Y-%m-%d %H:%M')}: {activity['name']} ({duration})"
+                table.add_row(
+                    start_time.strftime("%Y-%m-%d %H:%M"),
+                    activity["name"],
+                    duration,
                 )
+            console.print(table)
+            return
+
         else:
+            console.print(f"[red]Unknown category command: {cmd}[/red]")
             print(CATEGORY_HELP_TEXT)
-        return
+            return
 
     # Case 2: No arguments - Stop if running, prompt if not
     if not args:
         current_activity = manager.stop_activity()
         if current_activity:
             name, duration, category = current_activity
-            print(f"Stopped tracking: {name}")
-            print(f"Duration: {duration}")
-            print(f"Category: {category}")
+            console.print()
+            console.print(f"[bold green]Stopped tracking:[/bold green] {name}")
+            console.print(
+                f"[bold green]Duration:[/bold green] [yellow]{duration}[/yellow]"
+            )
+            console.print(f"[bold green]Category:[/bold green] [blue]{category}[/blue]")
         else:
             activity = input("What activity would you like to start?: ").strip()
             if activity:
                 manager.start_activity(activity)
-                print(f"Started tracking: {activity}")
+                console.print(f"[bold green]Started tracking:[/bold green] {activity}")
         return
 
     # Case 2: Command starts with "tell" - Handle query
@@ -478,23 +537,42 @@ def process_command(args: list[str]) -> None:
         results = manager.process_query(query)
 
         if not results:
-            print("No activities found for your query.")
+            console.print("[red]No activities found for your query.[/red]")
             return
 
-        for result in results:
-            if "total_duration" in result:
+        if "total_duration" in results[0]:
+            # Summary table for aggregated results
+            table = Table(title="Activity Summary")
+            table.add_column("Category", style="cyan")
+            table.add_column("Duration", justify="right")
+
+            for result in results:
                 category = result.get("category", "Uncategorized")
                 duration = manager.format_duration(result["total_duration"])
-                print(f"{category}: {duration}")
-            else:
+                table.add_row(category, duration)
+        else:
+            # Detailed activity list table
+            table = Table(title="Activities")
+            table.add_column("Time", style="cyan")
+            table.add_column("Activity")
+            table.add_column("Duration", justify="right")
+            table.add_column("Category", style="blue")
+
+            for result in results:
                 start_time = datetime.datetime.fromisoformat(str(result["start_time"]))
                 duration = (
                     manager.format_duration(result["duration"])
                     if result["duration"]
-                    else "In progress"
+                    else "[yellow]In progress[/yellow]"
                 )
-                name = result.get("name", "Unknown activity")
-                print(f"{start_time.strftime('%Y-%m-%d %H:%M')}: {name} ({duration})")
+                table.add_row(
+                    start_time.strftime("%H:%M"),
+                    result["name"],
+                    duration,
+                    result.get("category", "Uncategorized"),
+                )
+
+        console.print(table)
         return
 
     # Case 3: Start new activity
@@ -513,10 +591,11 @@ def process_command(args: list[str]) -> None:
         if response in ("y", "yes", ""):
             manager.stop_activity()
             manager.start_activity(activity_name)
-            print(f"Started tracking: {activity_name}")
+            console.print(f"[green]Started tracking:[/green] {activity_name}")
+
     else:
         manager.start_activity(activity_name)
-        print(f"Started tracking: {activity_name}")
+        console.print(f"[green]Started tracking:[/green] {activity_name}")
 
 
 def main(args: List[str]) -> None:
