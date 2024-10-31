@@ -67,3 +67,23 @@ ai make-obsidian-plugin "Plugin Name"
 ```
 
 **Note:** After `ai do`, you can input natural language without quotation marks.
+
+### 7. Activity Tracker (`ai log`)
+
+Tracks and analyzes your daily activities with AI-powered categorization.
+
+```bash
+ai log <activity>          # Start tracking an activity
+ai log                     # Stop current activity or start new one
+ai log tell <query>        # Query your activity history
+ai log category <command>  # Manage activity categories
+```
+
+Examples:
+
+```bash
+ai log working on python project
+ai log tell me how long I coded today
+ai log tell me what I did yesterday
+ai log category list
+```
