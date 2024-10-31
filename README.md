@@ -20,6 +20,8 @@ The repository includes the following tools to simplify your interactions with A
 
 Generates and executes terminal commands based on natural language input using AI assistance.
 
+**Note:** After `ai do`, you can input natural language without quotation marks.
+
 ```bash
 ai do Your command description here
 ```
@@ -60,13 +62,11 @@ ai convert "/path/to/file.txt to pdf"
 
 Generates a customizable Obsidian plugin based on user input and AI-driven code generation.
 
-**Note:** Quotation marks are not required. You can input natural language directly after the command.
 
 ```bash
 ai make-obsidian-plugin "Plugin Name"
 ```
 
-**Note:** After `ai do`, you can input natural language without quotation marks.
 
 ### 7. Activity Tracker (`ai log`)
 
@@ -87,3 +87,4 @@ ai log tell me how long I coded today
 ai log tell me what I did yesterday
 ai log category list
 ```
+
