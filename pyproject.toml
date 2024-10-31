@@ -5,6 +5,12 @@ description = "Tools to simplify life with AI"
 authors = ["Ty Fiero <tyfierodev@gmail.com>", "Mike Bird <tooluseai@gmail.com>"]
 readme = "README.md"
 packages = [{include = "tool_use", from = "src"}]
+license = "MIT"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -21,6 +27,7 @@ sounddevice = "^0.5.1"
 soundfile = "^0.12.1"
 google-auth-oauthlib = "^1.0.0"
 pynput = "^1.7.7"
+pydantic = "^2.9.2"
 
 [build-system]
 requires = ["poetry-core"]
@@ -29,6 +36,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.urls]
 "Homepage" = "https://github.com/ToolUse/tool-use-ai"
 "Bug Tracker" = "https://github.com/ToolUse/tool-use-ai/issues"
+"Documentation" = "https://github.com/ToolUse/tool-use-ai#readme"
 
 [tool.poetry.scripts]
 ai = "tool_use.cli:main"

@@ -3,7 +3,7 @@ import argparse
 import subprocess
 import pkg_resources
 from .scripts._script_dependencies import SCRIPT_DEPENDENCIES
-from .scripts import ai_cli, cal, obsidian_plugin, convert
+from .scripts import ai_cli, cal, obsidian_plugin, convert, transcribe, prioritize
 from .utils.config_wizard import setup_wizard, SCRIPT_INFO
 
 
@@ -38,6 +38,8 @@ def main():
         "make-obsidian-plugin": "Generate Obsidian plugin",
         "cal": "Calendar tool",
         "convert": "Convert anything to anything",
+        "transcribe": "Transcribe and analyze audio",
+        "prioritize": "Brain dump and prioritize tasks",
     }
 
     for name, help_text in all_scripts.items():
@@ -69,6 +71,8 @@ def main():
             "make-obsidian-plugin": obsidian_plugin,
             "cal": cal,
             "convert": convert,
+            "transcribe": transcribe,
+            "prioritize": prioritize,
         }
 
         # Run the appropriate script
