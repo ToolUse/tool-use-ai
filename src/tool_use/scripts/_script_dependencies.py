@@ -29,4 +29,5 @@ SCRIPT_DEPENDENCIES = {
         "pydantic",
         "openai>=1.12.0",
     ],
+    "log": [],
 }

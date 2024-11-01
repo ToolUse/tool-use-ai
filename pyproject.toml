@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tool-use-ai"
-version = "1.0.3"
+version = "1.1.0"
 description = "Tools to simplify life with AI"
 authors = ["Ty Fiero <tyfierodev@gmail.com>", "Mike Bird <tooluseai@gmail.com>"]
 readme = "README.md"
@@ -28,6 +28,9 @@ soundfile = "^0.12.1"
 google-auth-oauthlib = "^1.0.0"
 pynput = "^1.7.7"
 pydantic = "^2.9.2"
+google-api-python-client = "^2.149.0"
+pytz = "^2024.2"
+tzlocal = "^5.2"
 
 [build-system]
 requires = ["poetry-core"]
