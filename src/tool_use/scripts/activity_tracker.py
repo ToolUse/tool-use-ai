@@ -204,10 +204,17 @@ class ActivityManager:
         console = Console()
         example_templates = {
             "time_period": """
-                -- Shows totals for a time period
+                -- Shows totals for today
                 SELECT name, start_time, duration, category, SUM(duration) as total_duration 
                 FROM activities 
                 WHERE date(start_time) = date('now', 'localtime')
+                GROUP BY category
+            """,
+            "time_period": """
+                -- Shows totals for yesterday
+                SELECT name, start_time, duration, category, SUM(duration) as total_duration 
+                FROM activities 
+                WHERE date(start_time) = date('now', '-1 day', 'localtime')
                 GROUP BY category
             """,
             "comparison": """
@@ -235,6 +242,9 @@ class ActivityManager:
         - "how long did I code yesterday" → show coding-related activities from yesterday
         - "show me my activities this week" → show all activities from the past 7 days
         - "what did I do the most today" → show today's activities ordered by duration DESC
+
+        Here are some example query patterns (but feel free to modify or write your own):
+{example_templates}
 
         Database schema:
         CREATE TABLE activities (
@@ -268,31 +278,28 @@ class ActivityManager:
             cursor.execute("BEGIN")
             cursor.execute(sql_query)
             cursor.execute("ROLLBACK")
-        except sqlite3.Error as e:
-            self.console.print(f"[red]Error executing query: {e}[/red]")
-            results = []
 
-        # Execute the (possibly corrected) query
-        try:
-            # First check if the query has parameter placeholders
-            if "?" in sql_query:
-                # Have the AI fix the query to not use parameters
-                correction_prompt = f"""The SQL query:
+            # Execute the actual query and get results
+            cursor.execute(sql_query)
+            results = [dict(row) for row in cursor.fetchall()]
+
+        except sqlite3.Error as e:
+            print(f"SQL Error: {e}")  # Debug print
+            correction_prompt = f"""The SQL query:
 {sql_query}
-Contains parameter placeholders (?). Please rewrite it without using parameters,
-using direct values or conditions instead.
+Failed with error: {str(e)}
+
+Here are valid example patterns:
+{example_templates}
 
 Please provide a corrected SQL query that will work."""
 
-                sql_query = self.ai_service.query(correction_prompt).strip()
-                print(f"Corrected SQL (removed parameters): {sql_query}")  # Debug print
+            sql_query = self.ai_service.query(correction_prompt).strip()
+            print(f"Corrected SQL: {sql_query}")  # Debug print
 
+            # Execute the corrected query
             cursor.execute(sql_query)
             results = [dict(row) for row in cursor.fetchall()]
-            # print(f"Query results: {results}")  # TODO: remove after testing
-        except sqlite3.Error as e:
-            print(f"Error executing query: {e}")
-            results = []
 
         conn.close()
         return results
