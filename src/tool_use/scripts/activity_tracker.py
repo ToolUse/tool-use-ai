@@ -204,19 +204,34 @@ class ActivityManager:
         """Process natural language queries about activities with validation and correction"""
         console = Console()
         example_templates = {
-            "time_period": """
-                -- Shows totals for today
-                SELECT name, start_time, duration, category, SUM(duration) as total_duration 
+            "today": """
+                -- Shows activities from today
+                SELECT name, start_time, duration, category
                 FROM activities 
                 WHERE date(start_time) = date('now', 'localtime')
-                GROUP BY category
+                ORDER BY start_time DESC
             """,
-            "time_period": """
-                -- Shows totals for yesterday
-                SELECT name, start_time, duration, category, SUM(duration) as total_duration 
+            "yesterday": """
+                -- Shows activities from yesterday
+                SELECT name, start_time, duration, category
+                FROM activities 
+                WHERE date(start_time) = date('now', '-1 day', 'localtime')
+                ORDER BY start_time DESC
+            """,
+            "time_summary": """
+                -- Shows total time by category for a period
+                SELECT category, SUM(duration) as total_duration, COUNT(*) as activity_count
                 FROM activities 
                 WHERE date(start_time) = date('now', '-1 day', 'localtime')
                 GROUP BY category
+                ORDER BY total_duration DESC
+            """,
+            "longest_activities": """
+                -- Shows activities ordered by duration
+                SELECT name, start_time, duration, category
+                FROM activities
+                WHERE date(start_time) = date('now', '-1 day', 'localtime')
+                ORDER BY duration DESC
             """,
             "comparison": """
                 -- Compares two time periods
