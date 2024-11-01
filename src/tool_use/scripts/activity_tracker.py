@@ -146,6 +146,7 @@ class ActivityManager:
         prompt = f"""Given these existing categories: {', '.join(existing_categories) if existing_categories else 'None yet'},
         what category best fits this activity: '{activity_name}'?
         If none fit well, suggest a new category name.
+        It is important that these activities are categorized for reporting and analysis, so do not put activities into unrelated categories.
         Respond with just the category name, nothing else."""
 
         category = self.ai_service.query(prompt).strip()
@@ -445,6 +446,7 @@ def process_command(args: list[str]) -> None:
                 table.add_row(name, str(activity_count), duration_str, str(usage_count))
 
             console.print(table)
+            return
 
         elif cmd == "rename":
             if len(args) != 4:
