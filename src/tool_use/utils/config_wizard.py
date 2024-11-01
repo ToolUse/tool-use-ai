@@ -2,6 +2,7 @@
 
 from typing import Dict, List, Optional
 from ..config_manager import config_manager
+import os
 
 AVAILABLE_SERVICES = ["anthropic", "groq", "ollama"]
 
@@ -16,6 +17,24 @@ SCRIPT_INFO = {
         "configurable": ["ai_service", "ai_model"],
         "description": "Generate Obsidian plugins using AI",
     },
+    "transcribe": {
+        "name": "Transcribe",
+        "description": "Transcribe and analyze audio using AI",
+        "config_keys": {
+            "whisperfile_path": {
+                "description": "Path to store Whisper models",
+                "default": os.path.expanduser("~/.whisperfiles"),
+            },
+            "vault_path": {
+                "description": "Path to Obsidian vault for markdown export",
+                "default": os.path.expanduser("~/Documents/ObsidianVault"),
+            },
+            "default_model": {
+                "description": "Default Whisper model to use",
+                "default": "tiny.en",
+            }
+        }
+    }
 }
 
 
