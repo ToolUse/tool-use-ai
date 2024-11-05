@@ -92,5 +92,8 @@ ai log category list
 
 Prioritizes your tasks based on urgency and importance, helping you focus on what matters most.
 
+**Note:** You can input your tasks using voice commands for a hands-free experience.
+
 ```bash
 ai prioritize "List of tasks to prioritize"
+```
