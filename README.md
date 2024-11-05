@@ -88,3 +88,9 @@ ai log tell me what I did yesterday
 ai log category list
 ```
 
+### 8. Prioritize Tasks (`ai prioritize`)
+
+Prioritizes your tasks based on urgency and importance, helping you focus on what matters most.
+
+```bash
+ai prioritize "List of tasks to prioritize"
