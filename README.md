@@ -1,6 +1,6 @@
 # tool-use
 
-Tools to simplify life with AI. Brought to you by the hosts of [ToolUse](https://www.youtube.com/@ToolUseAI).
+Tools to simplify life with AI. Brought to you by the hosts of [ToolUse](https://www.youtube.com/@ToolUseAI). You can install the package via [PyPI](https://pypi.org/project/tool-use-ai/).
 
 ## Installation
 
