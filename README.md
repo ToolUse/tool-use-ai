@@ -1,6 +1,6 @@
 # tool-use
 
-Tools to simplify life with AI. Brought to you by the hosts of [ToolUse](https://www.youtube.com/@ToolUseAI).
+Tools to simplify life with AI. Brought to you by the hosts of [ToolUse](https://www.youtube.com/@ToolUseAI). You can install the package via [PyPI](https://pypi.org/project/tool-use-ai/).
 
 ## Installation
 
@@ -88,3 +88,12 @@ ai log tell me what I did yesterday
 ai log category list
 ```
 
+### 8. Prioritize Tasks (`ai prioritize`)
+
+Prioritizes your tasks based on urgency and importance, helping you focus on what matters most.
+
+**Note:** You can input your tasks using voice commands for a hands-free experience.
+
+```bash
+ai prioritize "List of tasks to prioritize"
+```
