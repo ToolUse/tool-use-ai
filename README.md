@@ -1,82 +1,64 @@
 # tool-use
 
-Tools to simplify life with AI. Brought to you by the hosts of [ToolUse](https://www.youtube.com/@ToolUseAI). You can install the package via [PyPI](https://pypi.org/project/tool-use-ai/).
+Tools to simplify life with AI. Brought to you by [Tool Use](https://www.youtube.com/@ToolUseAI).
+You can install the package via [PyPI](https://pypi.org/project/tool-use-ai/).
 
 ## Installation
-
-You can install the package using pip:
 
 ```bash
 pip install tool-use-ai
 ```
 
-## Available Tools
+## Command Structure
 
-The repository includes the following tools to simplify your interactions with AI:
+This toolkit provides two main command interfaces:
 
-**Note:** Use `ai` for general tools and `tooluse` specifically for the RSS CLI tool.
+- `ai`: General-purpose AI tools for everyday tasks
+- `tooluse`: Specific tools for podcast and community interaction
 
-### 1. AI CLI Tool (`ai do`)
+## AI Tools (`ai` command)
 
-Generates and executes terminal commands based on natural language input using AI assistance.
+### 1. Command Generation (`ai do`)
 
-**Note:** After `ai do`, you can input natural language without quotation marks.
+Generate and execute terminal commands from natural language.
 
 ```bash
 ai do Your command description here
 ```
 
-### 2. RSS CLI (`tooluse`)
+### 2. Calendar Manager (`ai cal`)
 
-Fetches and displays podcast episodes from a specified RSS feed, allowing you to interact with them.
-
-```bash
-tooluse
-```
-
-### 3. Contact Form (`tooluse contact`)
-
-Provides a contact form to submit feedback, requests or just to say hi.
-
-```bash
-tooluse contact
-```
-
-### 4. Calendar Manager (`cal`)
-
-Manages Google Calendar events, including creating, editing, searching, and deleting events.
+Manage Google Calendar events.
 
 ```bash
 ai cal
 ```
 
-### 5. Convert anything (`convert`)
+### 3. File Converter (`ai convert`)
 
-Converts anything to anything using Open Interpreter.
+Convert between file formats using Open Interpreter.
 
 ```bash
 ai convert "/path/to/file.txt to pdf"
 ```
 
-### 6. Obsidian Plugin Generator (`make-obsidian-plugin`)
+### 4. Obsidian Plugin Generator (`ai make-obsidian-plugin`)
 
-Generates a customizable Obsidian plugin based on user input and AI-driven code generation.
-
+Create custom Obsidian plugins with AI assistance.
 
 ```bash
 ai make-obsidian-plugin "Plugin Name"
 ```
 
+### 5. Activity Tracker (`ai log`)
 
-### 7. Activity Tracker (`ai log`)
-
-Tracks and analyzes your daily activities with AI-powered categorization.
+Track and analyze daily activities.
 
 ```bash
 ai log <activity>          # Start tracking an activity
 ai log                     # Stop current activity or start new one
-ai log tell <query>        # Query your activity history
-ai log category <command>  # Manage activity categories
+ai log tell <query>       # Query your activity history
+ai log category <command> # Manage activity categories
 ```
 
 Examples:
@@ -88,12 +70,34 @@ ai log tell me what I did yesterday
 ai log category list
 ```
 
-### 8. Prioritize Tasks (`ai prioritize`)
+### 6. Task Prioritizer (`ai prioritize`)
 
-Prioritizes your tasks based on urgency and importance, helping you focus on what matters most.
+Voice-based task organization tool that:
+
+- Organizes tasks by priority level
+- Provides empathetic analysis
+- Suggests concrete next steps
 
 **Note:** You input your tasks using voice commands for a hands-free experience after running the script
 
 ```bash
 ai prioritize
+```
+
+## Tool Use Tools (`tooluse` command)
+
+### 1. Podcast RSS Reader (`tooluse`)
+
+Fetch and interact with podcast episodes from RSS feeds.
+
+```bash
+tooluse
+```
+
+### 2. Contact Form (`tooluse contact`)
+
+Submit feedback, requests, or general messages.
+
+```bash
+tooluse contact
 ```
