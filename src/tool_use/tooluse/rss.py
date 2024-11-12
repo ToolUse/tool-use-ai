@@ -18,9 +18,16 @@ import requests
 console = Console()
 
 def fetch_rss_feed(url):
-    return feedparser.parse(url)
+    feed = feedparser.parse(url)
+    if feed.bozo:
+        console.print("[bold red]Error:[/bold red] Failed to parse RSS feed.")
+        return None
+    return feed
 
 def display_episodes(feed):
+    if not feed.entries:
+        console.print("[bold yellow]No episodes available to display.[/bold yellow]")
+        return
     table = Table(title="Podcast Episodes", box=box.ROUNDED)
     table.add_column("Title", style="cyan", no_wrap=True)
     table.add_column("Date", style="magenta")
@@ -98,10 +105,14 @@ def play_mp3(url):
             console.print("[bold red]Error:[/bold red] Could not play audio. Please install either:")
             console.print("- sounddevice and soundfile (pip install sounddevice soundfile)")
             console.print("- mpv (system package)")
+            console.print("[bold red]Debug Info:[/bold red] Ensure the RSS feed URL is correct and accessible.")
 
 def main():
     rss_url = "https://anchor.fm/s/fb2a98a0/podcast/rss"
     feed = fetch_rss_feed(rss_url)
+    if not feed or not feed.entries:
+        console.print("[bold yellow]No episodes found. Please check the RSS feed URL or your internet connection.[/bold yellow]")
+        return
 
     while True:
         console.clear()
