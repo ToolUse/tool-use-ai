@@ -3,7 +3,7 @@ import argparse
 import subprocess
 import pkg_resources
 from .scripts._script_dependencies import SCRIPT_DEPENDENCIES
-from .scripts import ai_cli, cal, obsidian_plugin, convert, transcribe, prioritize, activity_tracker
+from .scripts import ai_cli, cal, obsidian_plugin, convert, transcribe, prioritize, activity_tracker, marketing_agency
 from .utils.config_wizard import setup_wizard, SCRIPT_INFO
 
 
@@ -43,6 +43,7 @@ def main():
         "transcribe": "Transcribe and analyze audio",
         "prioritize": "Brain dump and prioritize tasks",
         "log": "Track your activities",
+        "marketing-plan": "Use a marketing agency of AI agents to create a marketing plan",
     }
 
     for name, help_text in all_scripts.items():
@@ -77,6 +78,7 @@ def main():
             "transcribe": transcribe,
             "prioritize": prioritize,
             "log": activity_tracker,
+            "marketing-plan": marketing_agency,
         }
 
         # Run the appropriate script

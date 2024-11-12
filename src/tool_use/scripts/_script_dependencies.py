@@ -30,4 +30,5 @@ SCRIPT_DEPENDENCIES = {
         "openai>=1.12.0",
     ],
     "log": [],
+    "marketing-plan": ["rich", "openai", "swarm"],
 }
