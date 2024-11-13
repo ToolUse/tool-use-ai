@@ -1,0 +1,55 @@
+# This workflow will upload a Python Package using Twine when a release is created
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Upload Python Package
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+
+permissions:
+  contents: write  # Changed to write to allow version update commit
+
+jobs:
+  deploy:
+    if: github.event.pull_request.merged == true  # Only run if PR was merged
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Fetch all history for version calculation
+        
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry python-semantic-release
+        poetry install
+        
+    - name: Update version
+      id: version
+      run: |
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        semantic-release version
+        echo "new_version=$(semantic-release print-version)" >> $GITHUB_OUTPUT
+        
+    - name: Build package
+      run: poetry build
+      
+    - name: Publish package
+      env:
+        POETRY_PYPI_TOKEN_PYPI: ${{ secrets.PYPI_API_TOKEN }}
+      run: poetry publish
