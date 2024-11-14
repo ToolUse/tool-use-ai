@@ -23,7 +23,7 @@ This toolkit provides two main command interfaces:
 Generate and execute terminal commands from natural language.
 
 ```bash
-ai do Your command description here
+ai do <your optional command description>
 ```
 
 ### 2. Calendar Manager (`ai cal`)
