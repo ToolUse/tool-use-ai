@@ -70,6 +70,16 @@ def execute_command(command: str) -> None:
             print(f"Error output:\n{e.stderr}")
 
 
+def get_user_query() -> str:
+    """Prompt the user for their natural language query."""
+    print("\nPlease enter your command request (what would you like to do?):")
+    query = input("> ").strip()
+    while not query:
+        print("Query cannot be empty. Please try again:")
+        query = input("> ").strip()
+    return query
+
+
 def main(args=None):
     parser = argparse.ArgumentParser(description="AI CLI Tool")
     parser.add_argument(
@@ -90,11 +100,10 @@ def main(args=None):
     model = known_args.model or tool_config["ai_model"]
     write_to_terminal_mode = tool_config.get("write_to_terminal", True)
 
-    # Get the task description
+    # Get the task description from arguments or prompt
     input_text = " ".join(unknown_args) if unknown_args else ""
     if not input_text:
-        parser.print_help()
-        sys.exit(1)
+        input_text = get_user_query()
 
     # Get environment info and query AI
     env_info = get_environment_info()
