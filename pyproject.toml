@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tool-use-ai"
-version = "1.1.5"
+version = "1.1.6"
 description = "Tools to simplify life with AI"
 authors = ["Ty Fiero <tyfierodev@gmail.com>", "Mike Bird <tooluseai@gmail.com>"]
 readme = "README.md"

@@ -7,9 +7,11 @@ import sys
 import time
 from typing import Dict, Optional
 from pynput.keyboard import Controller
+from rich.console import Console
 from ..utils.ai_service import AIService
 from ..config_manager import config_manager
 
+console = Console()
 keyboard = Controller()
 
 
@@ -40,16 +42,13 @@ def query_ai_service(
     try:
         return ai_service.query(prompt).strip()
     except Exception as e:
-        print(f"Error querying AI service: {e}", file=sys.stderr)
+        console.print(f"[red]Error querying AI service: {e}[/red]", file=sys.stderr)
         sys.exit(1)
 
 
 def write_to_terminal(command: str) -> None:
-    # Clear the current line
     sys.stdout.write("\r" + " " * (len(command) + 1) + "\r")
     sys.stdout.flush()
-
-    # Small delay to ensure terminal is ready
     time.sleep(0.1)
     keyboard.type(command)
 
@@ -59,15 +58,42 @@ def execute_command(command: str) -> None:
         result = subprocess.run(
             command, shell=True, check=True, text=True, capture_output=True
         )
-        print(f"\nCommand output:\n{result.stdout}")
+        if result.stdout:
+            console.print("\nCommand output:", style="green")
+            console.print(result.stdout)
         if result.stderr:
-            print(f"Error output:\n{result.stderr}")
+            console.print("\nWarning output:", style="yellow")
+            console.print(result.stderr)
     except subprocess.CalledProcessError as e:
-        print(f"Command failed with return code: {e.returncode}", file=sys.stderr)
+        console.print(f"\n[red]Command failed with return code: {e.returncode}[/red]")
         if e.stdout:
-            print(f"Command output:\n{e.stdout}")
+            console.print("\nCommand output:")
+            console.print(e.stdout)
         if e.stderr:
-            print(f"Error output:\n{e.stderr}")
+            console.print("\n[red]Error output:[/red]")
+            console.print(e.stderr)
+
+
+def get_command_explanation(command: str, service: str, model: Optional[str]) -> str:
+    """Get an explanation of what the command does."""
+    ai_service = AIService(service, model)
+    prompt = f"""Explain what this shell command does in detail: {command}
+    Break down each part and flag. Be concise but thorough."""
+
+    try:
+        return ai_service.query(prompt).strip()
+    except Exception as e:
+        return f"Could not get explanation: {e}"
+
+
+def get_user_query() -> str:
+    """Prompt the user for their natural language query."""
+    console.print("\nWhat command would you like me to generate?")
+    query = input("> ").strip()
+    while not query:
+        console.print("[yellow]Query cannot be empty. Please try again:[/yellow]")
+        query = input("> ").strip()
+    return query
 
 
 def main(args=None):
@@ -78,30 +104,49 @@ def main(args=None):
         help="Override default AI service",
     )
     parser.add_argument("--model", help="Override default AI model")
+    parser.add_argument(
+        "--debug", action="store_true", help="Show additional debug information"
+    )
 
     # Parse known args first to separate flags from the input text
     known_args, unknown_args = parser.parse_known_args(args)
 
     # Get tool config
-    tool_config = config_manager.get_tool_config("do")
+    try:
+        tool_config = config_manager.get_tool_config("do")
+    except Exception as e:
+        console.print(f"[red]Error loading config: {e}[/red]")
+        console.print("[yellow]Using default configuration[/yellow]")
+        tool_config = {
+            "ai_service": "anthropic",
+            "ai_model": None,
+            "write_to_terminal": True,
+        }
 
     # Command-line args override config
     service = known_args.service or tool_config["ai_service"]
-    model = known_args.model or tool_config["ai_model"]
+    model = known_args.model or tool_config.get("ai_model")
     write_to_terminal_mode = tool_config.get("write_to_terminal", True)
 
-    # Get the task description
+    # Debug output if requested
+    if known_args.debug:
+        console.print("\nDebug Information:", style="blue")
+        console.print(f"Service: {service}")
+        console.print(f"Model: {model}")
+        console.print(f"Write to terminal: {write_to_terminal_mode}")
+        console.print(f"Environment: {get_environment_info()}")
+
+    # Get the task description from arguments or prompt
     input_text = " ".join(unknown_args) if unknown_args else ""
     if not input_text:
-        parser.print_help()
-        sys.exit(1)
+        input_text = get_user_query()
 
     # Get environment info and query AI
     env_info = get_environment_info()
     command = query_ai_service(input_text, service, model, env_info)
 
     # Show the command preview
-    print(f"\n\033[92m{command}\033[0m")
+    console.print(f"\n[green]{command}[/green]")
 
     while True:
         if write_to_terminal_mode:
@@ -114,14 +159,14 @@ def main(args=None):
         choice = input(prompt).lower()
 
         if choice == "e":
-            print("\nExplanation:")
             explanation = get_command_explanation(command, service, model)
-            print(explanation)
-            print()  # Extra newline for readability
+            console.print("\n[blue]Explanation:[/blue]")
+            console.print(explanation)
+            console.print()  # Extra newline for readability
             continue
 
         if choice == "n":
-            print("Operation cancelled.")
+            console.print("[yellow]Operation cancelled.[/yellow]")
             break
 
         if choice == "":
@@ -133,4 +178,11 @@ def main(args=None):
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Operation cancelled by user.[/yellow]")
+        sys.exit(0)
+    except Exception as e:
+        console.print(f"\n[red]An unexpected error occurred: {e}[/red]")
+        sys.exit(1)
