@@ -84,6 +84,14 @@ Voice-based task organization tool that:
 ai prioritize
 ```
 
+### 7. Marketing Plan Generator (`ai marketing-plan`)
+
+Use a swarm of AI agents to generate a marketing plan for your business.
+
+```bash
+ai marketing-plan
+```
+
 ## Tool Use Tools (`tooluse` command)
 
 ### 1. Podcast RSS Reader (`tooluse`)

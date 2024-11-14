@@ -44,3 +44,9 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 ai = "tool_use.cli:main"
 tooluse = "tool_use.tooluse.cli:main"
+
+[tool.semantic_release]
+version_variable = ["pyproject.toml:tool.poetry.version"]
+branch = "main"
+commit_message = "chore: bump version to {version}"
+build_command = "poetry build"
