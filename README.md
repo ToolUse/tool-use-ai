@@ -92,6 +92,14 @@ Use a swarm of AI agents to generate a marketing plan for your business.
 ai marketing-plan
 ```
 
+### 8. Posture Coach (`ai posture`)
+
+Use the webcam and a tiny vision model to analyze your posture and focus.
+
+```bash
+ai posture
+```
+
 ## Tool Use Tools (`tooluse` command)
 
 ### 1. Podcast RSS Reader (`tooluse`)

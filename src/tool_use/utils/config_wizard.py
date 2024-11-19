@@ -34,6 +34,20 @@ SCRIPT_INFO = {
                 "default": "tiny.en",
             }
         }
+    },
+    "posture": {
+        "name": "Posture Coach",
+        "description": "Monitor posture and focus using AI and webcam",
+        "config_keys": {
+            "capture_interval": {
+                "description": "Interval between captures in seconds",
+                "default": 10,
+            },
+            "save_images": {
+                "description": "Save captured images to disk",
+                "default": False,
+            }
+        }
     }
 }
 

@@ -1,9 +1,8 @@
 import sys
 import argparse
 import subprocess
-import pkg_resources
+from importlib.metadata import version, PackageNotFoundError
 from .scripts._script_dependencies import SCRIPT_DEPENDENCIES
-from .scripts import ai_cli, cal, obsidian_plugin, convert, transcribe, prioritize, activity_tracker, marketing_agency
 from .utils.config_wizard import setup_wizard, SCRIPT_INFO
 
 
@@ -13,8 +12,8 @@ def ensure_dependencies(script_name):
 
     for package in SCRIPT_DEPENDENCIES[script_name]:
         try:
-            pkg_resources.require(package)
-        except (pkg_resources.DistributionNotFound, pkg_resources.VersionConflict):
+            version(package)
+        except PackageNotFoundError:
             print(f"Installing required dependency: {package}")
             subprocess.check_call(
                 [sys.executable, "-m", "pip", "install", "--upgrade", package]
@@ -44,6 +43,7 @@ def main():
         "prioritize": "Brain dump and prioritize tasks",
         "log": "Track your activities",
         "marketing-plan": "Use a marketing agency of AI agents to create a marketing plan",
+        "posture": "Use the webcam and a tiny vision model to analyze your posture and focus",
     }
 
     for name, help_text in all_scripts.items():
@@ -68,22 +68,25 @@ def main():
 
         # Try to import dependencies, install if missing
         ensure_dependencies(script_name)
-
-        # Map script names to their modules
+        
+        # Map script names to their module paths
         script_modules = {
-            "do": ai_cli,
-            "make-obsidian-plugin": obsidian_plugin,
-            "cal": cal,
-            "convert": convert,
-            "transcribe": transcribe,
-            "prioritize": prioritize,
-            "log": activity_tracker,
-            "marketing-plan": marketing_agency,
+            "do": "ai_cli",
+            "make-obsidian-plugin": "obsidian_plugin",
+            "cal": "cal",
+            "convert": "convert",
+            "transcribe": "transcribe",
+            "prioritize": "prioritize",
+            "log": "activity_tracker",
+            "marketing-plan": "marketing_agency",
+            "posture": "posture",
         }
 
-        # Run the appropriate script
+        # Dynamic import of only the needed module
         if script_name in script_modules:
-            script_modules[script_name].main(script_args)
+            module_name = script_modules[script_name]
+            module = __import__(f"tool_use.scripts.{module_name}", fromlist=["main"])
+            module.main(script_args)
         else:
             print(f"Unknown script: {script_name}")
             sys.exit(1)

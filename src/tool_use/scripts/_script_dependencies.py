@@ -31,4 +31,17 @@ SCRIPT_DEPENDENCIES = {
     ],
     "log": [],
     "marketing-plan": ["rich", "openai", "swarm"],
+    "posture": [
+        "moondream",
+        "rich",
+        "opencv-python",
+        "pillow",
+        "pydantic",
+        "llama-index",
+        "numpy>=1.22.4,<1.29.0",
+        "scipy>=1.10.0",
+        "transformers",
+        "llama-index",
+        "llama-index-llms-ollama",
+    ],
 }
