@@ -14,8 +14,20 @@ import sounddevice as sd
 import soundfile as sf
 import io
 import requests
+from . import contact
 
 console = Console()
+
+def select_main_option():
+    choices = [inquirer.List('option',
+                            message="What would you like to do?",
+                            choices=[
+                                ('Listen to Tool Use Podcast', 'podcast'),
+                                ('Contact Tool Use', 'contact'),
+                                ('Exit', 'exit')
+                            ])]
+    result = inquirer.prompt(choices)
+    return result['option'] if result else 'exit'
 
 def fetch_rss_feed(url):
     feed = feedparser.parse(url)
@@ -108,26 +120,35 @@ def play_mp3(url):
             console.print("[bold red]Debug Info:[/bold red] Ensure the RSS feed URL is correct and accessible.")
 
 def main():
-    rss_url = "https://anchor.fm/s/fb2a98a0/podcast/rss"
-    feed = fetch_rss_feed(rss_url)
-    if not feed or not feed.entries:
-        console.print("[bold yellow]No episodes found. Please check the RSS feed URL or your internet connection.[/bold yellow]")
-        return
-
     while True:
         console.clear()
-        display_episodes(feed)
-        episode = select_episode(feed)
-
-        if episode is None:
+        option = select_main_option()
+        
+        if option == 'exit':
             break
+        elif option == 'contact':
+            contact.main()
+        else:  # podcast option
+            rss_url = "https://anchor.fm/s/fb2a98a0/podcast/rss"
+            feed = fetch_rss_feed(rss_url)
+            if not feed or not feed.entries:
+                console.print("[bold yellow]No episodes found. Please check the RSS feed URL or your internet connection.[/bold yellow]")
+                continue
 
-        while True:
-            console.clear()
-            display_episode_options(episode)
-            option = prompt("Enter your choice (1-5): ")
-            if handle_option(episode, option):
-                break
+            while True:
+                console.clear()
+                display_episodes(feed)
+                episode = select_episode(feed)
+
+                if episode is None:
+                    break
+
+                while True:
+                    console.clear()
+                    display_episode_options(episode)
+                    option = prompt("Enter your choice (1-5): ")
+                    if handle_option(episode, option):
+                        break
 
 if __name__ == "__main__":
     main()
