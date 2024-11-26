@@ -23,7 +23,7 @@ This toolkit provides two main command interfaces:
 Generate and execute terminal commands from natural language.
 
 ```bash
-ai do Your command description here
+ai do <your optional command description>
 ```
 
 ### 2. Calendar Manager (`ai cal`)
@@ -82,6 +82,22 @@ Voice-based task organization tool that:
 
 ```bash
 ai prioritize
+```
+
+### 7. Marketing Plan Generator (`ai marketing-plan`)
+
+Use a swarm of AI agents to generate a marketing plan for your business.
+
+```bash
+ai marketing-plan
+```
+
+### 8. Posture Coach (`ai posture`)
+
+Use the webcam and a tiny vision model to analyze your posture and focus.
+
+```bash
+ai posture
 ```
 
 ## Tool Use Tools (`tooluse` command)

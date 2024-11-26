@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tool-use-ai"
-version = "1.1.4"
+version = "1.1.10"
 description = "Tools to simplify life with AI"
 authors = ["Ty Fiero <tyfierodev@gmail.com>", "Mike Bird <tooluseai@gmail.com>"]
 readme = "README.md"
@@ -22,6 +22,7 @@ anthropic = "^0.21.0"
 ollama = "^0.1.6"
 groq = "0.11.0"
 tomli = "^2.0.2"
+openai = "^1.54.4"
 tomli-w = "^1.1.0"
 sounddevice = "^0.5.1"
 soundfile = "^0.12.1"
@@ -44,3 +45,9 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 ai = "tool_use.cli:main"
 tooluse = "tool_use.tooluse.cli:main"
+
+[tool.semantic_release]
+version_variable = ["pyproject.toml:tool.poetry.version"]
+branch = "main"
+commit_message = "chore: bump version to {version}"
+build_command = "poetry build"
