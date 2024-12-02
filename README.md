@@ -100,6 +100,14 @@ Use the webcam and a tiny vision model to analyze your posture and focus.
 ai posture
 ```
 
+### 9. Promptathon (`ai promptathon`)
+
+Create a virtual prompt hackathon with AI judges and mentors.
+
+```bash
+ai promptathon
+```
+
 ## Tool Use Tools (`tooluse` command)
 
 ### 1. Podcast RSS Reader (`tooluse`)

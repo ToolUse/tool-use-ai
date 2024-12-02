@@ -1,0 +1,126 @@
+# Tool-Use Repository Development Guidelines
+
+## Creating a New Script
+
+To add a new script to the tool-use repository, you need to modify several files:
+
+1. Create a new script file in `src/tool_use/scripts/`: 
+
+Example: src/tool_use/scripts/my_script.py
+from ..utils.ai_service import AIService
+from ..config_manager import config_manager
+def main(args):
+    config_values = config_manager.get_tool_config("script_name")
+    # Your script implementation
+    pass
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        console.print("\n[yellow]Operation cancelled by user.[/yellow]")
+        sys.exit(0)
+    except Exception as e:
+        console.print(f"\n[red]An unexpected error occurred: {e}[/red]")
+        sys.exit(1)
+
+2. Add dependencies to `src/tool_use/scripts/_script_dependencies.py`:
+    
+SCRIPT_DEPENDENCIES = {
+# ... existing dependencies ...
+"my-script": ["required-package1", "required-package2"]
+}
+
+3. Add configuration in `src/tool_use/utils/config_wizard.py`:
+    SCRIPT_INFO = {
+# ... existing scripts ...
+"my-script": {
+    "name": "My Script",
+    "description": "What your script does",
+    "config_keys": [
+            {
+            "key": "my_config_key",
+            "prompt": "Enter configuration value:",
+            "description": "What this config value does",
+            "required": True
+            }
+        ]
+    }
+}
+    
+4. Update `src/tool_use/cli.py`:
+- Add to `all_scripts` dictionary
+- Add to `script_modules` mapping
+
+5. Add script to `README.md`
+
+## Using AIService
+
+The AIService utility (`src/tool_use/utils/ai_service.py`) provides a standardized way to interact with AI models. Example usage from prioritize.py:
+
+from ..utils.ai_service import AIService
+# Initialize the service
+ai = AIService()
+# Simple completion
+response = ai.query("Your prompt here")
+
+
+#Structured output
+
+class Example(BaseModel):
+    example: str = Field(description="example")
+    
+class StructuredOutput(BaseModel):
+    """Example description for the structured output, keys can be any pydantic supported field"""
+    field1: str = Field(description="First field for the output")
+    field2: List[Example] = Field(description="List of examples")
+    
+# Structured outputs only supported by openai
+ai_service = AIService(service_type="openai")
+response = ai_service.query_structured(prompt, StructuredOutput, system_prompt)
+
+field1, field2 = response
+
+## Script Best Practices
+
+1. Use config_manager for settings:
+    
+from ..config_manager import config_manager
+config_values = config_manager.get_tool_config("script_name")
+
+2. Handle arguments properly:
+def main(args):
+    print("Usage: tool-use my-script [args]")
+    return
+
+3. Provide clear error messages and user feedback
+
+4. Follow existing patterns for consistency:
+- Use relative imports
+- Handle dependencies through SCRIPT_DEPENDENCIES
+- Provide configuration through config_wizard
+- Document usage in script's docstring
+
+
+# Error Handling
+Make sure to handle errors gracefully and provide clear error messages to the user. 
+
+
+# Formatting
+- Use Rich when possible to display print statements in a visually appealing way
+
+## Common Patterns
+
+1. AI Integration:
+   - Use AIService for AI interactions
+   - Structure prompts clearly
+   - Handle API errors gracefully
+
+2. Configuration:
+   - Use config_wizard for user settings
+   - Validate config values
+   - Provide clear configuration prompts
+
+3. CLI Integration:
+   - Follow existing argument patterns
+   - Provide help text
+   - Handle invalid inputs gracefully

@@ -43,6 +43,8 @@ class AIService:
                     if hasattr(response, "content") and isinstance(response.content, list):
                         return response.content[0].text if response.content else ""
                     return str(response)
+                elif self.service_type == "openai":
+                    return self._query_openai(prompt, system_prompt, max_tokens)
                 else:
                     raise ValueError(f"Unsupported service type: {self.service_type}")
             except Exception as e:
@@ -85,6 +87,23 @@ class AIService:
         if hasattr(completion, "content") and isinstance(completion.content, list):
             return completion.content[0].text if completion.content else ""
         return completion.content
+
+    def _query_openai(self, prompt: str, system_prompt: Optional[str] = None, max_tokens: int = 1024) -> str:
+        try:
+            messages = []
+            if system_prompt:
+                messages.append({"role": "system", "content": system_prompt})
+            messages.append({"role": "user", "content": prompt})
+            
+            completion = self.client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                max_tokens=max_tokens,
+            )
+            return completion.choices[0].message.content
+        except Exception as e:
+            print(f"Error in OpenAI query: {e}")
+            raise
 
     def openai_structured_output(self, system_prompt: str, user_prompt: str, data_model: Type[T]) -> T:
         """Query OpenAI with structured output using Pydantic model"""
