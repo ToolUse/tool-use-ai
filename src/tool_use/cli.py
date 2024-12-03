@@ -44,6 +44,7 @@ def main():
         "log": "Track your activities",
         "marketing-plan": "Use a marketing agency of AI agents to create a marketing plan",
         "posture": "Use the webcam and a tiny vision model to analyze your posture and focus",
+        "promptathon": "Run a virtual prompt hackathon"
     }
 
     for name, help_text in all_scripts.items():
@@ -80,6 +81,7 @@ def main():
             "log": "activity_tracker",
             "marketing-plan": "marketing_agency",
             "posture": "posture",
+            "promptathon": "promptathon"
         }
 
         # Dynamic import of only the needed module

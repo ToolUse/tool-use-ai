@@ -44,4 +44,5 @@ SCRIPT_DEPENDENCIES = {
         "llama-index",
         "llama-index-llms-ollama",
     ],
+    "promptathon": ["rich"]
 }

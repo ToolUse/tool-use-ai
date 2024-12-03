@@ -48,6 +48,11 @@ SCRIPT_INFO = {
                 "default": False,
             }
         }
+    },
+    "promptathon": {
+        "name": "Promptathon",
+        "description": "Run a virtual prompt hackathon competition with AI participants",
+        "configurable": ["ai_service", "ai_model"]
     }
 }
 
