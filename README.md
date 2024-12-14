@@ -1,5 +1,12 @@
 # tool-use
-[![PyPI Downloads](https://static.pepy.tech/badge/tool-use-ai)](https://pepy.tech/projects/tool-use-ai)
+<p>
+    <a href="https://pypi.python.org/pypi/tool-use-ai/" alt="PyPI version">
+        <img alt="PyPI" src="https://img.shields.io/pypi/v/prefect?color=0052FF&labelColor=090422"></a>
+    <a href="(https://static.pepy.tech/badge/tool-use-ai)" alt="Downloads">
+        <img src="https://img.shields.io/pypi/dm/prefect?color=0052FF&labelColor=090422" /></a>
+    <a href="https://www.youtube.com/@ToolUseAI" alt="YouTube">
+        <img src="https://img.shields.io/badge/youtube-watch_videos-red.svg?color=0052FF&labelColor=090422&logo=youtube" /></a>
+</p>
 
 Tools to simplify life with AI. Brought to you by [Tool Use](https://www.youtube.com/@ToolUseAI).
 You can install the package via [PyPI](https://pypi.org/project/tool-use-ai/).
