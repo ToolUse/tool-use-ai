@@ -1,10 +1,10 @@
 # tool-use
 <p>
     <a href="https://pypi.python.org/pypi/tool-use-ai/" alt="PyPI version">
-        <img alt="PyPI" src="https://img.shields.io/pypi/v/prefect?color=0052FF&labelColor=090422"></a>
+        <img alt="PyPI" src="https://img.shields.io/pypi/v/tool-use-ai?color=0052FF&labelColor=090422"></a>
     <a href="(https://static.pepy.tech/badge/tool-use-ai)" alt="Downloads">
-        <img src="https://img.shields.io/pypi/dm/prefect?color=0052FF&labelColor=090422" /></a>
-    <a href="https://www.youtube.com/@ToolUseAI" alt="YouTube">
+        <img src="https://img.shields.io/pypi/dm/tool-use-ai?color=0052FF&labelColor=090422" /></a>
+     <a href="https://www.youtube.com/@ToolUseAI" alt="YouTube">
         <img src="https://img.shields.io/badge/youtube-watch_videos-red.svg?color=0052FF&labelColor=090422&logo=youtube" /></a>
 </p>
 
