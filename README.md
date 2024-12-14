@@ -1,4 +1,5 @@
 # tool-use
+[![PyPI Downloads](https://static.pepy.tech/badge/tool-use-ai)](https://pepy.tech/projects/tool-use-ai)
 
 Tools to simplify life with AI. Brought to you by [Tool Use](https://www.youtube.com/@ToolUseAI).
 You can install the package via [PyPI](https://pypi.org/project/tool-use-ai/).
