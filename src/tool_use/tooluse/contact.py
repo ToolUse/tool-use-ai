@@ -31,11 +31,11 @@ def submit_feedback():
         data = {
             "subject": subject,
             "text": text,
-            "email": user_email 
+            "user_email": user_email
         }
 
         try:
-            url = "https://tyfiero-tool_use_feedback.web.val.run" 
+            url = "https://api.anetic.co/v0/mail/tooluse/tool-use-feedback" 
             headers = {
                 'Content-Type': 'application/json',
                 'User-Agent': 'ToolUse-CLI/1.0'
